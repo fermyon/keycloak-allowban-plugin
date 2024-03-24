@@ -1,4 +1,4 @@
-package lix.systems.keycloak;
+package systems.lix.keycloak;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

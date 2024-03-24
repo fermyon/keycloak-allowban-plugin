@@ -1,4 +1,4 @@
-package lix.systems.keycloak;
+package systems.lix.keycloak;
 
 import org.keycloak.Config;
 import org.keycloak.authentication.Authenticator;

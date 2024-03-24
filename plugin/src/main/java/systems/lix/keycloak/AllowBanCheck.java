@@ -1,4 +1,4 @@
-package lix.systems.keycloak;
+package systems.lix.keycloak;
 
 import jakarta.ws.rs.core.Response;
 import org.keycloak.authentication.AuthenticationFlowContext;
@@ -25,6 +25,9 @@ public class AllowBanCheck implements Authenticator {
         var attr = context.getUser().getFirstAttribute("githubId");
 
         if (attr == null) {
+            // We don't think this should be "attempted", because this must be
+            // a required authenticator, and we want to pass if we don't apply.
+            context.success();
             return;
         }
 

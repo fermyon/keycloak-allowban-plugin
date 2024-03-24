@@ -2,9 +2,14 @@
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
     flake-utils.url = "github:numtide/flake-utils";
+    microvm = {
+      url = "github:astro/microvm.nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-utils.follows = "flake-utils";
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, flake-utils, microvm }:
     let
       out = system:
         let
@@ -14,41 +19,32 @@
           };
         in
         {
-          devShells.default = (pkgs.buildFHSEnv {
-            name = "s4d-env";
-            targetPkgs = pkgs: (with pkgs; [
+          devShells.default = pkgs.mkShell {
+            buildInputs = with pkgs; [
               jdk
               zlib
-              freetype
-              fontconfig
               maven
-              protobuf
-            ]);
-            runScript = "zsh";
-          }).env;
-
-          packages.default = pkgs.maven.buildMavenPackage {
-            pname = "keycloak-lists-plugin";
-            version = "1.0";
-
-            src = ./plugin;
-
-            mvnHash = "sha256-UaVCt6KIjR8i3vHVp5YWqu8zzM7mftXyrv5J2jxtw6Q=";
-
-            buildPhase = ''
-              mvn --offline package;
-            '';
-
-            installPhase = ''
-              mkdir -p $out/share/java
-              install -Dm644 target/*.jar $out/share/java
-            '';
+              nixos-rebuild
+            ];
           };
+
+          packages.default = pkgs.callPackage ./package.nix { };
+          packages.run = self.nixosConfigurations.test.config.microvm.declaredRunner;
         };
     in
     flake-utils.lib.eachDefaultSystem out // {
-      overlays.default = final: prev: {
+      nixosConfigurations.test = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        modules = [
+          ({ ... }: {
+            services.keycloak.plugins = [ self.packages.x86_64-linux.default ];
+          })
+          ./test-nixos.nix
+          microvm.nixosModules.microvm
+        ];
       };
+
+      overlays.default = final: prev: { };
     };
 
 }

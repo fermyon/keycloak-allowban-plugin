@@ -1,4 +1,4 @@
-package lix.systems.keycloak;
+package systems.lix.keycloak;
 
 /**
  * A database of whether users are allow-listed or banned.
