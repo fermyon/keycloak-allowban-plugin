@@ -24,7 +24,8 @@ public class AllowBanCheck implements Authenticator {
         // The reason that we don't use the external ID link is that people can delete those.
         var attr = context.getUser().getFirstAttribute("githubId");
 
-        if (attr == null) {
+        // The empty case is only if there is a mistake in a user
+        if (attr == null || attr.isEmpty()) {
             // We don't think this should be "attempted", because this must be
             // a required authenticator, and we want to pass if we don't apply.
             context.success();
@@ -32,11 +33,13 @@ public class AllowBanCheck implements Authenticator {
         }
 
         if (allowBansDB.isUserBannedById(attr)) {
+            LOG.error("User {} is banned", context.getUser().getUsername());
             context.getEvent().error("User is banned");
             var challenge = context.form().setError("User is banned!").createErrorPage(Response.Status.UNAUTHORIZED);
             context.failure(AuthenticationFlowError.ACCESS_DENIED, challenge);
             return;
         } else if (allowBansDB.isUsingAllowList() && !allowBansDB.isUserExplicitlyAllowedById(attr)) {
+            LOG.error("User {} is not allow-listed", context.getUser().getUsername());
             context.getEvent().error("User is not allow-listed");
             var challenge = context.form().setError("User is not allow-listed!").createErrorPage(Response.Status.UNAUTHORIZED);
             context.failure(AuthenticationFlowError.ACCESS_DENIED, challenge);
@@ -58,9 +61,8 @@ public class AllowBanCheck implements Authenticator {
 
     @Override
     public boolean configuredFor(KeycloakSession keycloakSession, RealmModel realmModel, UserModel userModel) {
-        var attr = userModel.getFirstAttribute("githubId");
-
-        return attr != null;
+        // "Credential setup required" error if false is returned here.
+        return true;
     }
 
     @Override
