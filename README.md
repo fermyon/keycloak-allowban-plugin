@@ -104,3 +104,11 @@ ExecStart=/start-keycloak
 
 Then `systemctl restart keycloak`. Next create a forward like `ssh
 -L1337:localhost:1337 localvm` and attach your Java debugger to port 1337.
+
+### Future steps
+
+We might need to do account age stuff, if we get sockpuppet problems.
+
+Note this also: https://keycloak.discourse.group/t/retrieve-identity-provider-github-token/16613
+
+Also, the GitHub IdP mappers get all of this response's info, including account age: https://docs.github.com/en/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user
