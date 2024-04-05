@@ -36,6 +36,9 @@ in
     settings = {
       log-level = "INFO";
       spi-authenticator-allow-ban-check-authenticator-dbpath = "/var/keycloak-allow-bans";
+      spi-theme-static-max-age = -1;
+      spi-theme-cache-themes = false;
+      spi-theme-cache-templates = false;
     };
   };
 
