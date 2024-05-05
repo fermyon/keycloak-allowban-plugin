@@ -5,7 +5,7 @@ maven.buildMavenPackage {
 
   src = ./plugin;
 
-  mvnHash = "sha256-UaVCt6KIjR8i3vHVp5YWqu8zzM7mftXyrv5J2jxtw6Q=";
+  mvnHash = "sha256-93INDkc0FPEqYaPE8NRq6m/Rfc9AZb4w5ycRTnbXMdQ=";
 
   buildPhase = ''
     mvn --offline package;
