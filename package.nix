@@ -1,11 +1,11 @@
-{ maven }:
+{ maven, lib }:
 maven.buildMavenPackage {
   pname = "keycloak-lists-plugin";
   version = "1.0";
 
   src = ./plugin;
 
-  mvnHash = "sha256-93INDkc0FPEqYaPE8NRq6m/Rfc9AZb4w5ycRTnbXMdQ=";
+  mvnHash = "sha256-hzl3ypSAwfS1AiQ5Bg1drIyNIUHHx9eRTbVkEuBi2Hw=";
 
   buildPhase = ''
     mvn --offline package;
