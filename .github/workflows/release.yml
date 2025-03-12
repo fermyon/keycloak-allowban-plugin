@@ -24,23 +24,23 @@ jobs:
       run: mvn -B package --file pom.xml
 
     - name: Delete canary tag
-        uses: dev-drprasad/delete-tag-and-release@v1.1
-        env:
-            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-            tag_name: canary
+      uses: dev-drprasad/delete-tag-and-release@v1.1
+      env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+          tag_name: canary
 
-      - name: Recreate canary tag and release
-        uses: ncipollo/release-action@v1.15.0
-        with:
-            tag: canary
-            allowUpdates: true
-            prerelease: true
+    - name: Recreate canary tag and release
+      uses: ncipollo/release-action@v1.15.0
+      with:
+          tag: canary
+          allowUpdates: true
+          prerelease: true
 
-      - name: Upload jar files to Github release
-        uses: svenstaro/upload-release-action@v2
-        with:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-            file: "plugin/target/*.jar"
-            file_glob: true
-            tag: canary
+    - name: Upload jar files to Github release
+      uses: svenstaro/upload-release-action@v2
+      with:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: "plugin/target/*.jar"
+          file_glob: true
+          tag: canary
