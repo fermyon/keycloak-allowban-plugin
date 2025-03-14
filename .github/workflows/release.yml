@@ -25,7 +25,7 @@ jobs:
 
     - name: configure tag name
       id: tag
-      run: echo ::set-output name=tag::$(date +'%Y%m%d')-$(git rev-parse --short ${{ github.sha }})
+      run: echo "tag=$(date +'%Y%m%d')-$(git rev-parse --short ${{ github.sha }})" >> $GITHUB_OUTPUT
 
     - name: Create GitHub release
       uses: ncipollo/release-action@v1.15.0
