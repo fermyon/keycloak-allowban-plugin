@@ -41,7 +41,7 @@ public class AllowBanCheck implements Authenticator {
         } else if (allowBansDB.isUsingAllowList() && !allowBansDB.isUserExplicitlyAllowedById(attr)) {
             LOG.error("User {} is not allow-listed", context.getUser().getUsername());
             context.getEvent().error("User is not allow-listed");
-            var challenge = context.form().setError("Looks like you don't have an Fermyon Wasm Functions account yet. Request one <a href=\"https://fibsu0jcu2g.typeform.com/fwf-preview\" target=\"_blank\">here</a> or <a href=\"mailto:support@fermyon.com\">reach out to support</a> if you think there's been a mistake").createErrorPage(Response.Status.UNAUTHORIZED);
+            var challenge = context.form().setError("Looks like you don't have a Fermyon Wasm Functions account yet. Request one <a href=\"https://fibsu0jcu2g.typeform.com/fwf-preview\" target=\"_blank\">here</a> or <a href=\"mailto:support@fermyon.com\">reach out to support</a> if you think there's been a mistake").createErrorPage(Response.Status.UNAUTHORIZED);
             context.failure(AuthenticationFlowError.ACCESS_DENIED, challenge);
             return;
         }
